@@ -6,3 +6,7 @@
 .App > div {
     margin-right: 50px;
 }
+
+.buttonDelete {
+    margin-left: 10px;
+}
