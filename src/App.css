@@ -10,3 +10,19 @@
 .buttonDelete {
     margin-left: 10px;
 }
+
+.error {
+    border: red 3px solid;
+}
+
+.error-message {
+    color: red;
+}
+
+.active-filter {
+    background-color: rgba(127, 175, 239, 0.91);
+}
+
+.is-done {
+    opacity: 0.5;
+}
