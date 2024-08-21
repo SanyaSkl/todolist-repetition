@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
-import {Todolist} from './components/Todolist';
+import {TaskType, Todolist} from './components/Todolist';
 import {v1} from "uuid";
 import {AddItemForm} from "./components/AddItemForm";
 
@@ -9,6 +9,10 @@ type TodolistType = {
     id: string
     title: string
     filter: FilterValuesType
+}
+
+type TasksStateType = {
+    [key: string]: Array<TaskType>
 }
 
 function App() {
@@ -26,6 +30,14 @@ function App() {
         setTasksObj({...tasksObj})
     }
 
+    function changeTodolistTitle(id: string, newTitle: string) {
+        const todoList = todoLists.find(tl => tl.id === id)
+        if(todoList) {
+            todoList.title = newTitle
+            setTodoLists([...todoLists])
+        }
+    }
+
     function addTask(title: string, todolistId: string) {
         let newTask =
             {
@@ -38,11 +50,21 @@ function App() {
         setTasksObj({...tasksObj})
     }
 
-    function changeStatus(taskId: string, isDone: boolean, todolistId: string) {
+    function changeStatus(id: string, isDone: boolean, todolistId: string) {
         let tasks = tasksObj[todolistId]
-        let task = tasks.find(t => t.id === taskId)
+        let task = tasks.find(t => t.id === id)
         if (task) {
             task.isDone = isDone
+            setTasksObj({...tasksObj})
+        }
+
+    }
+
+    function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
+        let tasks = tasksObj[todolistId]
+        let task = tasks.find(t => t.id === id)
+        if (task) {
+            task.title = newTitle
             setTasksObj({...tasksObj})
         }
 
@@ -64,7 +86,7 @@ function App() {
         {id: todolistId2, title: 'What to buy', filter: 'all'}
     ])
 
-    let [tasksObj, setTasksObj] = useState({
+    let [tasksObj, setTasksObj] = useState<TasksStateType>({
         [todolistId1]: [
             {id: v1(), title: "CSS&HTML", isDone: true},
             {id: v1(), title: "JS", isDone: true},
@@ -111,8 +133,10 @@ function App() {
                         changeFilter={changeFilter}
                         addTask={addTask}
                         changeTaskStatus={changeStatus}
+                        changeTaskTitle={changeTaskTitle}
                         filter={tl.filter}
                         removeTodolist={removeTodolist}
+                        changeTodolistTitle={changeTodolistTitle}
                     />
                 })
             }
