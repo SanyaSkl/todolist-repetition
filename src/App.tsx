@@ -13,7 +13,7 @@ export type TodolistType = {
     filter: FilterValuesType
 }
 
-type TasksStateType = {
+export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
@@ -50,6 +50,19 @@ function App() {
         let tasks = tasksObj[todolistId]
         tasksObj[todolistId] = [newTask, ...tasks]
         setTasksObj({...tasksObj})
+    }
+
+    function addTodolist(title: string) {
+        let todolist: TodolistType = {
+            id: v1(),
+            filter: 'all',
+            title: title
+        }
+        setTodoLists([todolist, ...todoLists]);
+        setTasksObj({
+            ...tasksObj,
+            [todolist.id]: []
+        })
     }
 
     function changeStatus(id: string, isDone: boolean, todolistId: string) {
@@ -101,18 +114,7 @@ function App() {
         ]
     })
 
-    function addTodolist(title: string) {
-        let todolist: TodolistType = {
-            id: v1(),
-            filter: 'all',
-            title: title
-        }
-        setTodoLists([todolist, ...todoLists]);
-        setTasksObj({
-            ...tasksObj,
-            [todolist.id]: []
-        })
-    }
+
 
     return (
         <div className="App">
