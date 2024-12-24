@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import './App.css';
 import {TaskType, Todolist} from './components/Todolist';
 import {v1} from "uuid";
@@ -60,7 +60,7 @@ function App() {
         }
     }
 
-    function addTask(title: string, todolistId: string) {
+    const addTask = useCallback( (title: string, todolistId: string) => {
         let newTask =
             {
                 id: v1(),
@@ -70,9 +70,9 @@ function App() {
         let tasks = tasksObj[todolistId]
         tasksObj[todolistId] = [newTask, ...tasks]
         setTasksObj({...tasksObj})
-    }
+    }, [] )
 
-    function addTodolist(title: string) {
+    const addTodolist = useCallback( (title: string) => {
         let todolist: TodolistType = {
             id: v1(),
             filter: 'all',
@@ -83,7 +83,7 @@ function App() {
             ...tasksObj,
             [todolist.id]: []
         })
-    }
+    }, [] )
 
     function changeStatus(id: string, isDone: boolean, todolistId: string) {
         let tasks = tasksObj[todolistId]
