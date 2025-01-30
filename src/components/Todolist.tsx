@@ -2,7 +2,7 @@ import {Delete} from "@mui/icons-material";
 import {Button, IconButton} from "@mui/material";
 import React, {useCallback} from "react";
 import {FilterValuesType} from "../App";
-import {AddItemForm} from "./AddItemForm";
+import {AddItemForm} from "./AddItemForm/AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Task} from "./Task";
 

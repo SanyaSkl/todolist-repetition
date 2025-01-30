@@ -3,7 +3,7 @@ import {AppBar, Button, Container, Grid, IconButton, Toolbar, Typography} from "
 import {useCallback} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import './App.css';
-import {AddItemForm} from "./components/AddItemForm";
+import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 import {TaskType, Todolist} from './components/Todolist';
 import {AppRootState} from "./state/store";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/task-reduser";
