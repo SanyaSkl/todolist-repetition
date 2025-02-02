@@ -1,7 +1,7 @@
 import {Delete} from "@mui/icons-material";
 import {Checkbox, IconButton} from "@mui/material";
 import React, {ChangeEvent, useCallback} from "react";
-import {EditableSpan} from "./EditableSpan";
+import {EditableSpan} from "./EditableSpan/EditableSpan";
 import {TaskType} from "./Todolist";
 
 type TaskPropsType = {
