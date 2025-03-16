@@ -1,11 +1,11 @@
-import {Menu} from "@mui/icons-material";
-import {AppBar, Button, Container, Grid, IconButton, Toolbar, Typography} from "@mui/material";
+import {Menu} from '@mui/icons-material';
+import {AppBar, Button, Container, Grid, IconButton, Toolbar, Typography} from '@mui/material';
 import '../App/App.css';
-import {AddItemForm} from "../components/AddItemForm/AddItemForm";
+import {AddItemForm} from '../components/AddItemForm/AddItemForm';
 import {TaskType, Todolist} from '../components/Todolist';
-import {useAppWithRedux} from "./hooks/useAppWithRedux";
+import {useAppWithRedux} from './hooks/useAppWithRedux';
 
-export type FilterValuesType = "all" | "completed" | "active"
+export type FilterValuesType = 'all' | 'completed' | 'active'
 export type TodolistType = {
     id: string
     title: string
@@ -33,15 +33,15 @@ function AppWithRedux() {
 
     return (
         <div className="App">
-            <AppBar position='static'>
+            <AppBar position="static">
                 <Toolbar>
-                    <IconButton edge='start' color='inherit' aria-label='menu'>
+                    <IconButton edge="start" color="inherit" aria-label="menu">
                         <Menu/>
                     </IconButton>
-                    <Typography variant='h6'>
+                    <Typography variant="h6">
                         News
                     </Typography>
-                    <Button color='inherit'>Login</Button>
+                    <Button color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
             <Container fixed>
@@ -52,10 +52,10 @@ function AppWithRedux() {
                     {
                         todolists.map((tl) => {
                             let tasksForTodolist = tasks[tl.id];
-                            if (tl.filter === "completed") {
+                            if (tl.filter === 'completed') {
                                 tasksForTodolist = tasksForTodolist.filter(t => t.isDone);
                             }
-                            if (tl.filter === "active") {
+                            if (tl.filter === 'active') {
                                 tasksForTodolist = tasksForTodolist.filter(t => !t.isDone);
                             }
                             return (

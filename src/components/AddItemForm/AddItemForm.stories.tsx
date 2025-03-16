@@ -2,7 +2,7 @@ import {action} from '@storybook/addon-actions';
 import {Meta} from "@storybook/react";
 import React from "react";
 import {Task} from "../Task";
-import {AddItemForm, AddItemFormPropsType} from "./AddItemForm";
+import {AddItemForm} from "./AddItemForm";
 
 const meta: Meta<typeof AddItemForm> = {
     title: "Components/AddItemForm", // The title for Storybook hierarchy

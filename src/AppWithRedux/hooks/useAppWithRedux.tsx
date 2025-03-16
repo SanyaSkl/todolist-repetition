@@ -1,19 +1,16 @@
-import {useCallback} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootState} from "../../state/store";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../../state/task-reduser";
+import {useCallback} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootState} from '../../state/store';
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from '../../state/task-reduser';
 import {
     addTodolistAC,
     changeTodolistFilterAC,
     changeTodolistTitleAC,
     removeTodolistAC
-} from "../../state/todolist-reduser";
-import {FilterValuesType, TasksStateType, TodolistType} from "../AppWithRedux";
+} from '../../state/todolist-reduser';
+import {FilterValuesType, TasksStateType, TodolistType} from '../AppWithRedux';
 
-export function useAppWithRedux()
-
-=>
-{
+export function useAppWithRedux() {
     const dispatch = useDispatch()
     const todolists = useSelector<AppRootState, Array<TodolistType>>(state => state.todolists)
     const tasks = useSelector<AppRootState, TasksStateType>(state => state.tasks)
