@@ -16,7 +16,6 @@ type ResponseType<D = {}> = {
 export type TaskType = {
     description: string
     title: string
-    completed: boolean
     status: number
     priority: number
     startDate: string
@@ -25,6 +24,15 @@ export type TaskType = {
     todoListId: string
     order: number
     addedDate: string
+}
+
+export type UpdateTaskModel = {
+    title: string
+    description: string
+    status: number
+    priority: number
+    startDate: string
+    deadline: string
 }
 
 export type TasksResponseType = {
@@ -36,7 +44,7 @@ export type TasksResponseType = {
 const settings = {
     withCredentials: true,
     headers: {
-        'API-KEY': '******-****-***-****-**********'
+        'API-KEY': '*******************************'
     }
 }
 
@@ -58,7 +66,7 @@ export const todolistsApi = {
         return instance.delete<ResponseType>(`todo-lists/${id}`)
     },
 
-    updateTodolist(title: string, id: string) {
+    updateTodolist(id: string, title: string) {
         return instance.put<ResponseType>(`todo-lists/${id}`, {title: title})
     },
 
@@ -71,11 +79,11 @@ export const todolistsApi = {
     },
 
     createTask(todolistId: string, title: string) {
-        return instance.post(`todo-lists/${todolistId}/tasks/`, {title: title})
+        return instance.post<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks/`, {title: title})
     },
 
     updateTask(todolistId: string, taskId: string, title: string) {
-        return instance.put(`todo-lists/${todolistId}/tasks/${taskId}/`, {title: title})
+        return instance.put<UpdateTaskModel>(`todo-lists/${todolistId}/tasks/${taskId}/`, {title: title})
     },
 }
 
