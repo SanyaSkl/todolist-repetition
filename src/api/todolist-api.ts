@@ -44,7 +44,7 @@ export type TasksResponseType = {
 const settings = {
     withCredentials: true,
     headers: {
-        'API-KEY': '*******************************'
+        'API-KEY': '1f899b25-ea32-4422-868d-0e025508e3bf'
     }
 }
 
@@ -55,7 +55,7 @@ const instance = axios.create({
 
 export const todolistsApi = {
     getTodolists() {
-        return instance.get<TodolistType>('todo-lists')
+        return instance.get<TodolistType[]>('todo-lists')
     },
 
     createTodolist(title: string) {
@@ -78,12 +78,12 @@ export const todolistsApi = {
         return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
     },
 
-    createTask(todolistId: string, title: string) {
-        return instance.post<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks/`, {title: title})
+    createTask(todolistId: string, taskTitle: string) {
+        return instance.post<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks/`, {title: taskTitle})
     },
 
-    updateTask(todolistId: string, taskId: string, title: string) {
-        return instance.put<UpdateTaskModel>(`todo-lists/${todolistId}/tasks/${taskId}/`, {title: title})
+    updateTask(todolistId: string, taskId: string, model: UpdateTaskModel) {
+        return instance.put<UpdateTaskModel>(`todo-lists/${todolistId}/tasks/${taskId}/`, model)
     },
 }
 
