@@ -1,13 +1,13 @@
-import {Task} from './App'
+import {Task} from '../App.tsx'
 import {Button} from './Button.tsx';
 
 type Props = {
     title: string
     tasks: Task[]
-    date?: string
+    deleteTask: (taskId: number) => void
 }
 
-export const TodolistItem = ({title, tasks, date}: Props) => {
+export const TodolistItem = ({title, tasks, deleteTask}: Props) => {
     return (
         <div>
             <h3>{title}</h3>
@@ -24,6 +24,7 @@ export const TodolistItem = ({title, tasks, date}: Props) => {
                             <li key={task.id}>
                                 <input type="checkbox" checked={task.isDone}/>
                                 <span>{task.title}</span>
+                                <Button onClick={() => deleteTask(task.id)} title={'x'}/>
                             </li>
                         )
                     })}
@@ -34,7 +35,6 @@ export const TodolistItem = ({title, tasks, date}: Props) => {
                 <Button title={'Active'}/>
                 <Button title={'Completed'}/>
             </div>
-            <div>{date}</div>
         </div>
     )
 }
