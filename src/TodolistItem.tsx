@@ -8,14 +8,20 @@ type Props = {
     deleteTask: (taskId: string) => void
     changeFilter: (filter: FilterValues) => void
     createTask: (title: string) => void
+    changeTaskStatus: (taskId: string, isDone: boolean) => void
 }
 
-export const TodolistItem = ({title, tasks, deleteTask, changeFilter, createTask}: Props) => {
+export const TodolistItem = (props: Props) => {
+    const {title, tasks, deleteTask, changeFilter, createTask, changeTaskStatus} = props
+
     const [taskTitle, setTaskTitle] = useState('')
 
     const createTaskHandler = () => {
-        createTask(taskTitle)
-        setTaskTitle('')
+        const trimmedTitle = taskTitle.trim()
+        if (taskTitle.trim() !== '') {
+            createTask(trimmedTitle)
+            setTaskTitle('')
+        }
     }
     const changeTaskTitleHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setTaskTitle(event.currentTarget.value)
@@ -31,11 +37,15 @@ export const TodolistItem = ({title, tasks, deleteTask, changeFilter, createTask
         <div>
             <h3>{title}</h3>
             <div>
-                <input value={taskTitle}
-                       onChange={changeTaskTitleHandler}
-                       onKeyDown={createTaskOnEnterHandler}
+                <input
+                    value={taskTitle}
+                    onChange={changeTaskTitleHandler}
+                    onKeyDown={createTaskOnEnterHandler}
                 />
-                <Button title={'+'} onClick={createTaskHandler}/>
+                <Button
+                    title={'+'}
+                    onClick={createTaskHandler}
+                />
             </div>
             {tasks.length === 0 ? (
                 <p>Тасок нет</p>
@@ -45,9 +55,15 @@ export const TodolistItem = ({title, tasks, deleteTask, changeFilter, createTask
                         const deleteTaskHandler = () => {
                             deleteTask(task.id)
                         }
+
+                        const changeTaskStatusHandler = (event: ChangeEvent<HTMLInputElement>) => {
+                            const newStatusValue = event.currentTarget.checked
+                            changeTaskStatus(task.id, newStatusValue)
+                        }
+
                         return (
                             <li key={task.id}>
-                                <input type="checkbox" checked={task.isDone}/>
+                                <input type="checkbox" checked={task.isDone} onChange={changeTaskStatusHandler}/>
                                 <span>{task.title}</span>
                                 <Button title={'x'} onClick={deleteTaskHandler}/>
                             </li>
