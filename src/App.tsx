@@ -14,6 +14,7 @@ export type FilterValues = 'all' | 'active' | 'completed'
 export const App = () => {
     const [filter, setFilter] = useState<FilterValues>('all')
 
+
     const [tasks, setTasks] = useState<Task[]>([
         {id: v1(), title: 'HTML&CSS', isDone: true},
         {id: v1(), title: 'JS', isDone: true},
@@ -58,6 +59,7 @@ export const App = () => {
                           changeFilter={changeFilter}
                           createTask={createTask}
                           changeTaskStatus={changeTaskStatus}
+                          filter={filter}
             />
         </div>
     )
