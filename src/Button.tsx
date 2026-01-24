@@ -1,6 +1,6 @@
 type Props = {
   title: string
-  onClick?: () => void
+  onClick?: ( ) => void
   className?: string
 }
 
