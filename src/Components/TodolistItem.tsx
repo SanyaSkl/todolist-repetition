@@ -6,7 +6,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import {ChangeEvent} from 'react';
 import type {FilterValues, Task, Todolist} from '../App.tsx'
-import {containerSx} from '../TodolistItem.styles.ts';
+import {containerSx, getListItemSx} from '../Styles/TodolistItem.styles.ts';
 import {CreateItemForm} from './CreateItemForm.tsx';
 import {EditableSpan} from './EditableSpan.tsx';
 
@@ -75,8 +75,7 @@ export const TodolistItem = (props: Props) => {
                         }
 
                         return (
-                            <ListItem key={task.id}
-                                      sx={{p: 0, justifyContent: 'space-between', opacity: task.isDone ? 0.5 : 1}}>
+                            <ListItem key={task.id} sx={getListItemSx(task.isDone)}>
                                 <div>
                                     <Checkbox checked={task.isDone} onChange={changeTaskStatusHandler}/>
                                     <EditableSpan value={task.title} onChange={changeTaskTitleHandler}/>
