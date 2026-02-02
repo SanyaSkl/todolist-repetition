@@ -26,10 +26,7 @@ beforeEach(() => {
 test('correct todolist should be deleted', () => {
     const endState = todolistsReducer(startState, deleteTodolistAC(todolistId1))
 
-    // 3. Проверка, что действие изменило state соответствующим образомэ
-    // в массиве останется один todolist
     expect(endState.length).toBe(1)
-    // удалится нужный todolist, не любой
     expect(endState[0].id).toBe(todolistId2)
 })
 
