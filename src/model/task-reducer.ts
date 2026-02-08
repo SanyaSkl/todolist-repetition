@@ -1,10 +1,11 @@
 import {v1} from 'uuid';
-import type {TasksState} from '../App'
+import type {TasksState} from '../app/App.tsx'
 import {CreateTodolistAction, DeleteTodolistAction} from './todolists-reducer.ts';
 
 const initialState: TasksState = {}
 
 export const tasksReducer = (state: TasksState = initialState, action: Actions): TasksState => {
+    debugger
     switch (action.type) {
         case 'create_todolist': {
             return {...state, [action.payload.id]: []}

@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import {ChangeEvent} from 'react';
-import type {FilterValues, Task, Todolist} from '../App.tsx'
+import type {FilterValues, Task, Todolist} from '../app/App.tsx'
 import {containerSx, getListItemSx} from '../Styles/TodolistItem.styles.ts';
 import {CreateItemForm} from './CreateItemForm.tsx';
 import {EditableSpan} from './EditableSpan.tsx';
