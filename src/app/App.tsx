@@ -8,7 +8,6 @@ import IconButton from '@mui/material/IconButton'
 import Switch from '@mui/material/Switch'
 import Toolbar from '@mui/material/Toolbar'
 import {useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux';
 import {CreateItemForm} from '../Components/CreateItemForm.tsx';
 import {TodolistItem} from '../Components/TodolistItem.tsx'
 import {changeTaskStatusAC, changeTaskTitleAC, createTaskAC, deleteTaskAC} from '../model/task-reducer.ts';
@@ -20,7 +19,10 @@ import {
 } from '../model/todolists-reducer.ts';
 import {NavButton} from '../Styles/NavButton.ts';
 import {containerSx} from '../Styles/TodolistItem.styles.ts';
-import {RootState} from './store.ts';
+import {useAppDispatch} from "../common/hooks/useAppDispatch.ts";
+import {useAppSelector} from "../common/hooks/useAppSelector.ts";
+import {selectTodolists} from "../model/todolists-selectors.ts";
+import {selectTasks} from "../model/tasks-selectors.ts";
 
 type ThemeMode = 'dark' | 'light'
 
@@ -44,13 +46,10 @@ export type TasksState = {
 
 export const App = () => {
 
-    const todolists = useSelector<RootState, Todolist[]>(state => state.todolists)
-    const tasks = useSelector<RootState, TasksState>(state => state.tasks)
+    const todolists = useAppSelector(selectTodolists)
+    const tasks = useAppSelector(selectTasks)
 
-    // const [todolists, dispatchToTodolists] = useReducer(todolistsReducer, [])
-    // const [tasks, dispatchToTasks] = useReducer(tasksReducer, {})
-
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const [themeMode, setThemeMode] = useState<ThemeMode>('light')
 
@@ -72,7 +71,7 @@ export const App = () => {
     }
 
     const createTask = (todolistId: string, title: string) => {
-        dispatch(createTaskAC({todolistId, title}))
+        dispatch(createTaskAC(todolistId, title))
     }
 
     const changeTaskTitle = (todolistId: string, taskId: string, title: string) => {
@@ -88,7 +87,7 @@ export const App = () => {
     }
 
     const deleteTodolist = (todolistId: string) => {
-        const action = deleteTodolistAC(todolistId)
+        const action = deleteTodolistAC({id: todolistId})
         dispatch(action)
     }
 
