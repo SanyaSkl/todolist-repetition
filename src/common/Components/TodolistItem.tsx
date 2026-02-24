@@ -5,48 +5,44 @@ import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import {ChangeEvent} from 'react';
-import type {FilterValues, Task, Todolist} from '../app/App.tsx'
-import {containerSx, getListItemSx} from '../Styles/TodolistItem.styles.ts';
+import {containerSx, getListItemSx} from '@/Styles/TodolistItem.styles.ts';
 import {CreateItemForm} from './CreateItemForm.tsx';
 import {EditableSpan} from './EditableSpan.tsx';
+import {
+    changeTodolistFilterAC,
+    changeTodolistTitleAC,
+    deleteTodolistAC,
+    FilterValues,
+    Todolist
+} from "@/model/todolists-reducer.ts";
+import {changeTaskStatusAC, changeTaskTitleAC, createTaskAC, deleteTaskAC, Task} from "@/model/task-reducer.ts";
+import {useAppDispatch} from "@/common/hooks/useAppDispatch.ts";
 
 
 type Props = {
     todolist: Todolist
     tasks: Task[]
-    deleteTask: (todolistId: string, taskId: string) => void
-    changeFilter: (todolistId: string, filter: FilterValues) => void
-    createTask: (todolistId: string, title: string) => void
-    changeTaskStatus: (todolistId: string, taskId: string, isDone: boolean) => void
-    deleteTodolist: (todolistId: string) => void
-    changeTaskTitle: (todolistId: string, taskId: string, title: string) => void
-    changeTodolistTitle: (todolistId: string, title: string) => void
 }
 
 export const TodolistItem = (props: Props) => {
+    const dispatch = useAppDispatch()
+
     const {
         todolist: {id, title, filter},
         tasks,
-        deleteTask,
-        changeFilter,
-        changeTaskStatus,
-        deleteTodolist,
-        createTask,
-        changeTaskTitle,
-        changeTodolistTitle
     } = props
 
     const changeFilterHandler = (filter: FilterValues) => {
-        changeFilter(id, filter)
+        dispatch(changeTodolistFilterAC({id, filter}))
     }
     const deleteTodolistHandler = () => {
-        deleteTodolist(id)
+        dispatch(deleteTodolistAC({id}))
     }
     const createTaskHandler = (title: string) => {
-        createTask(id, title)
+        dispatch(createTaskAC(id, title))
     }
     const changeTodolistTitleHandler = (title: string) => {
-        changeTodolistTitle(id, title)
+        dispatch(changeTodolistTitleAC({id, title}))
     }
 
     return (
@@ -65,13 +61,19 @@ export const TodolistItem = (props: Props) => {
                     {tasks.map(task => {
 
                         const deleteTaskHandler = () => {
-                            deleteTask(id, task.id)
+                            dispatch(deleteTaskAC({todolistId: id, taskId: task.id}))
                         }
+
                         const changeTaskTitleHandler = (title: string) => {
-                            changeTaskTitle(id, task.id, title)
+                            dispatch(changeTaskTitleAC({todolistId: id, taskId: task.id, title}))
                         }
+
                         const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                            changeTaskStatus(id, task.id, e.currentTarget.checked)
+                            dispatch(changeTaskStatusAC({
+                                todolistId: id,
+                                taskId: task.id,
+                                isDone: e.currentTarget.checked
+                            }))
                         }
 
                         return (
