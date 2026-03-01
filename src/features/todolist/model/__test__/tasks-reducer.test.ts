@@ -6,8 +6,8 @@ import {
     deleteTaskAC,
     tasksReducer,
     TasksState
-} from './task-reducer.ts';
-import {createTodolistAC, deleteTodolistAC} from './todolists-reducer.ts';
+} from '../task-reducer.ts';
+import {createTodolistAC, deleteTodolistAC} from '../todolists-reducer.ts';
 
 let startState: TasksState = {}
 

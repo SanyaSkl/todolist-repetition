@@ -1,9 +1,9 @@
 import {Grid} from "@mui/material";
-import {CreateItemForm} from "@/common/Components/CreateItemForm.tsx";
+import {CreateItemForm} from "@/common/Components/CreateItemForm/CreateItemForm.tsx";
 import Container from "@mui/material/Container";
-import {createTodolistAC} from "@/model/todolists-reducer.ts";
+import {createTodolistAC} from "@/features/todolist/model/todolists-reducer.ts";
 import {useAppDispatch} from "@/common/hooks/useAppDispatch.ts";
-import {Todolists} from "@/Todolists.tsx";
+import {Todolists} from "@/features/todolist/ui/Todolists/Todolists.tsx";
 
 
 export const Main = () => {
