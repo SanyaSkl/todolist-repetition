@@ -7,8 +7,8 @@ import AppBar from '@mui/material/AppBar'
 import IconButton from '@mui/material/IconButton'
 import Switch from '@mui/material/Switch'
 import Toolbar from '@mui/material/Toolbar'
-import {NavButton} from '@/Styles/NavButton.ts';
-import {containerSx} from '@/Styles/TodolistItem.styles.ts';
+import {NavButton} from '@/common/Components/NavButton/NavButton.ts';
+import {containerSx} from '@/common/Styles/container.styles.ts';
 import Container from "@mui/material/Container";
 import {changeThemeModeAC} from "@/app/app-reducer.ts";
 
