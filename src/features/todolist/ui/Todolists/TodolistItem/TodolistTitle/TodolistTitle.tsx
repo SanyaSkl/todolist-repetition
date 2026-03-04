@@ -1,9 +1,9 @@
 import {EditableSpan} from "@/common/Components/EditableSpan/EditableSpan.tsx";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {useAppDispatch} from "@/common/hooks/useAppDispatch.ts";
 import {changeTodolistTitleAC, deleteTodolistAC, Todolist} from "@/features/todolist/model/todolists-reducer.ts";
-import styles from './TodolistItem.module.css'
+import styles from "./TodolistTitle.module.css"
+import {useAppDispatch} from "@/common/hooks";
 
 type Props = {
     todolist: Todolist
