@@ -10,18 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.3.7",
     "@reduxjs/toolkit": "^2.11.2",
     "axios": "^1.13.6",
+    "prettier": "^3.8.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-redux": "^9.2.0"
   },
   "devDependencies": {
-    "@types/node": "^25.2.3",
+    "@types/node": "latest",
     "@types/react": "19.0.2",
     "@types/react-dom": "19.0.2",
     "@vitejs/plugin-react-swc": "3.7.2",
