@@ -1,5 +1,5 @@
-import { createTodolistAC, deleteTodolistAC } from "./todolists-reducer.ts"
-import { createAction, createReducer, nanoid } from "@reduxjs/toolkit"
+import { createTodolistTC, deleteTodolistTC } from "./todolists-slice.ts"
+import { createSlice, nanoid } from "@reduxjs/toolkit"
 
 export type Task = {
   id: string
@@ -11,59 +11,73 @@ export type TasksState = {
   [key: string]: Task[]
 }
 
-const initialState: TasksState = {}
-
-export const createTaskAC = createAction("tasks/createTask", (todolistId: string, title: string) => ({
-  payload: { todolistId, taskId: nanoid(), title },
-}))
-
-export const deleteTaskAC = createAction<{ todolistId: string; taskId: string }>("tasks/deleteTask")
-
-export const changeTaskStatusAC = createAction<{ todolistId: string; taskId: string; isDone: boolean }>(
-  "tasks/changeTaskStatus",
-)
-
-export const changeTaskTitleAC = createAction<{ todolistId: string; taskId: string; title: string }>(
-  "tasks/changeTaskTitle",
-)
-
-export const tasksReducer = createReducer(initialState, (builder) => {
-  builder
-    .addCase(createTodolistAC, (state, action) => {
-      state[action.payload.id] = []
-    })
-    .addCase(deleteTodolistAC, (state, action) => {
-      delete state[action.payload.id]
-    })
-    .addCase(createTaskAC, (state, action) => {
-      const { todolistId, taskId, title } = action.payload
-      if (!state[todolistId]) return
-      const newTask = { id: taskId, title, isDone: false }
-      state[todolistId].unshift(newTask)
-    })
-
-    .addCase(deleteTaskAC, (state, action) => {
-      const { todolistId, taskId } = action.payload
-      const tasks = state[todolistId]
-      if (!tasks) return
-      const index = tasks.findIndex((task) => task.id === taskId)
-      if (index > -1) {
+export const tasksSlice = createSlice({
+  name: "tasks",
+  initialState: {} as TasksState,
+  reducers: (create) => ({
+    deleteTaskAC: create.reducer<{ todolistId: string; taskId: string }>((state, action) => {
+      const tasks = state[action.payload.todolistId]
+      const index = tasks.findIndex((task) => task.id === action.payload.taskId)
+      if (index !== -1) {
         tasks.splice(index, 1)
       }
-    })
-    .addCase(changeTaskStatusAC, (state, action) => {
-      const { todolistId, taskId, isDone } = action.payload
-      const task = state[todolistId].find((t) => t.id === taskId)
+    }),
+    createTaskAC: create.reducer<{ todolistId: string; title: string }>((state, action) => {
+      const newTask: Task = { title: action.payload.title, isDone: false, id: nanoid() }
+      state[action.payload.todolistId].unshift(newTask)
+    }),
+    changeTaskStatusAC: create.reducer<{ todolistId: string; taskId: string; isDone: boolean }>((state, action) => {
+      const task = state[action.payload.todolistId].find((task) => task.id === action.payload.taskId)
       if (task) {
-        task.isDone = isDone
+        task.isDone = action.payload.isDone
       }
-    })
-    .addCase(changeTaskTitleAC, (state, action) => {
-      const { todolistId, taskId, title } = action.payload
-      const task = state[todolistId].find((t) => t.id === taskId)
-      if (task) task.title = title
-    })
+    }),
+    changeTaskTitleAC: create.reducer<{ todolistId: string; taskId: string; title: string }>((state, action) => {
+      const task = state[action.payload.todolistId].find((task) => task.id === action.payload.taskId)
+      if (task) {
+        task.title = action.payload.title
+      }
+    }),
+  }),
+  extraReducers: (builder) => {
+    builder
+      .addCase(createTodolistTC.fulfilled, (state, action) => {
+        state[action.payload.todolist.id] = []
+      })
+      .addCase(deleteTodolistTC.fulfilled, (state, action) => {
+        delete state[action.payload.id]
+      })
+  },
+  selectors: {
+    selectTasks: (state) => state,
+  },
 })
+
+export const { deleteTaskAC, createTaskAC, changeTaskStatusAC, changeTaskTitleAC } = tasksSlice.actions
+export const { selectTasks } = tasksSlice.selectors
+export const tasksReducer = tasksSlice.reducer
+
+//const initialState: TasksState = {}
+
+// export const createTaskAC = createAction("tasks/createTask", (todolistId: string, title: string) => ({
+//   payload: { todolistId, taskId: nanoid(), title },
+// }))
+//
+// export const tasksReducer = createReducer(initialState, (builder) => {
+//   builder
+//     .addCase(createTodolistAC, (state, action) => {
+//       state[action.payload.id] = []
+//     })
+//     .addCase(deleteTodolistAC, (state, action) => {
+//       delete state[action.payload.id]
+//     })
+//     .addCase(createTaskAC, (state, action) => {
+//       const { todolistId, taskId, title } = action.payload
+//       if (!state[todolistId]) return
+//       const newTask = { id: taskId, title, isDone: false }
+//       state[todolistId].unshift(newTask)
+//     })
+// })
 
 //-----------------------------------------------------------------
 

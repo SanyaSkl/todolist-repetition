@@ -3,7 +3,7 @@ import { EditableSpan } from "@/common/Components/EditableSpan/EditableSpan.tsx"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useAppDispatch } from "@/common/hooks/useAppDispatch.ts"
-import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC, Task } from "@/features/todolist/model/task-reducer.ts"
+import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC, Task } from "@/features/todolist/model/task-slice.ts"
 import { ChangeEvent } from "react"
 import { getListItemSx } from "./TaskItem.styles.ts"
 
