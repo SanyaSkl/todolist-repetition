@@ -2,10 +2,10 @@ import styles from "./App.module.css"
 import { ThemeProvider } from "@mui/material"
 import CssBaseline from "@mui/material/CssBaseline"
 import { Header } from "@/common/Components/Header/Header.tsx"
-import { selectThemeMode } from "@/app/app-selectors.ts"
 import { Main } from "@/app/Main.tsx"
 import { useAppSelector } from "@/common/hooks"
 import { getTheme } from "@/common/theme"
+import { selectThemeMode } from "@/app/app-slice.ts"
 
 export const App = () => {
   const themeMode = useAppSelector(selectThemeMode)
