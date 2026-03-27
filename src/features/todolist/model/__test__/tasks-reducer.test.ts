@@ -27,6 +27,7 @@ beforeEach(() => {
 })
 
 test("array should be created for new todolist", () => {
+  // @ts-ignore
   const endState = tasksReducer(startState, createTodolistTC("New todolist"))
 
   const keys = Object.keys(endState)
@@ -40,6 +41,7 @@ test("array should be created for new todolist", () => {
 })
 
 test("property with todolistId should be deleted", () => {
+  // @ts-ignore
   const endState = tasksReducer(startState, deleteTodolistTC({ id: "todolistId2" }))
 
   const keys = Object.keys(endState)
@@ -67,6 +69,7 @@ test("correct task should be deleted", () => {
 })
 
 test("correct task should be created at correct array", () => {
+  // @ts-ignore
   const endState = tasksReducer(startState, createTaskAC("todolistId2", "juice"))
 
   expect(endState.todolistId1.length).toBe(3)

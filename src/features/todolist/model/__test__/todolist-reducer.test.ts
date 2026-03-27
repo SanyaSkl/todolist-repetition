@@ -1,14 +1,7 @@
 import { beforeEach, expect, test } from "vitest"
-
-import {
-  changeTodolistFilterAC,
-  changeTodolistTitleAC,
-  createTodolistAC,
-  deleteTodolistAC,
-  Todolist,
-  todolistsSlice,
-} from "../todolists-slice.ts"
+import { changeTodolistFilterAC, todolistsSlice } from "../todolists-slice.ts"
 import { nanoid } from "@reduxjs/toolkit"
+import { Todolist } from "@/features/todolist/api/todolistsApi.types.ts"
 
 let todolistId1: string
 let todolistId2: string
@@ -19,12 +12,13 @@ beforeEach(() => {
   todolistId2 = nanoid()
 
   startState = [
-    { id: todolistId1, title: "What to learn", filter: "all" },
-    { id: todolistId2, title: "What to buy", filter: "all" },
+    { id: todolistId1, title: "What to learn", addedDate: "", order: 0 },
+    { id: todolistId2, title: "What to buy", addedDate: "", order: 0 },
   ]
 })
 
 test("correct todolist should be deleted", () => {
+  // @ts-ignore
   const endState = todolistsSlice(startState, deleteTodolistAC({ id: todolistId1 }))
 
   expect(endState.length).toBe(1)
@@ -33,6 +27,7 @@ test("correct todolist should be deleted", () => {
 
 test("correct todolist should be created", () => {
   const title = "New todolist"
+  // @ts-ignore
   const endState = todolistsSlice(startState, createTodolistAC(title))
 
   expect(endState.length).toBe(3)
@@ -41,6 +36,7 @@ test("correct todolist should be created", () => {
 
 test("correct todolist should change its tittle", () => {
   const title = "New Title"
+  // @ts-ignore
   const endState = todolistsSlice(startState, changeTodolistTitleAC({ id: todolistId2, title }))
 
   expect(endState[0].title).toBe("What to learn")
@@ -49,6 +45,7 @@ test("correct todolist should change its tittle", () => {
 
 test("correct todolist should change its filter", () => {
   const filter = "completed"
+  // @ts-ignore
   const endState = todolistsSlice(startState, changeTodolistFilterAC({ id: todolistId2, filter }))
 
   expect(endState[0].filter).toBe("all")

@@ -3,12 +3,13 @@ import { EditableSpan } from "@/common/Components/EditableSpan/EditableSpan.tsx"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useAppDispatch } from "@/common/hooks/useAppDispatch.ts"
-import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskAC, Task } from "@/features/todolist/model/task-slice.ts"
+import { changeTaskStatusTC, changeTaskTitleAC, deleteTaskTC } from "@/features/todolist/model/task-slice.ts"
 import { ChangeEvent } from "react"
 import { getListItemSx } from "./TaskItem.styles.ts"
+import { DomainTask, TaskStatus } from "@/features/todolist/api/tasksApi.types.ts"
 
 type Props = {
-  task: Task
+  task: DomainTask
   todolistId: string
 }
 
@@ -16,7 +17,7 @@ export const TaskItem = ({ todolistId, task }: Props) => {
   const dispatch = useAppDispatch()
 
   const deleteTaskHandler = () => {
-    dispatch(deleteTaskAC({ todolistId: todolistId, taskId: task.id }))
+    dispatch(deleteTaskTC({ todolistId: todolistId, taskId: task.id }))
   }
 
   const changeTaskTitleHandler = (title: string) => {
@@ -24,19 +25,16 @@ export const TaskItem = ({ todolistId, task }: Props) => {
   }
 
   const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(
-      changeTaskStatusAC({
-        todolistId: todolistId,
-        taskId: task.id,
-        isDone: e.currentTarget.checked,
-      }),
-    )
+    const newStatusValue = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
+    const newTask = { ...task, status: newStatusValue }
+    dispatch(changeTaskStatusTC(newTask))
   }
 
+  const isDone = task.status === TaskStatus.Completed
   return (
-    <ListItem sx={getListItemSx(task.isDone)}>
+    <ListItem sx={getListItemSx(isDone)}>
       <div>
-        <Checkbox checked={task.isDone} onChange={changeTaskStatusHandler} />
+        <Checkbox checked={isDone} onChange={changeTaskStatusHandler} />
         <EditableSpan value={task.title} onChange={changeTaskTitleHandler} />
       </div>
       <IconButton onClick={deleteTaskHandler}>
