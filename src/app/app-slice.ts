@@ -11,7 +11,7 @@ export const appSlice = createSlice({
     changeThemeModeAC: create.reducer<{ themeMode: ThemeMode }>((state, action) => {
       state.themeMode = action.payload.themeMode
     }),
-    changeStatusAC: create.reducer<{ status: RequestStatus }>((state, action) => {
+    setAppStatusAC: create.reducer<{ status: RequestStatus }>((state, action) => {
       state.status = action.payload.status
     }),
   }),
@@ -21,7 +21,7 @@ export const appSlice = createSlice({
   },
 })
 
-export const { changeThemeModeAC, changeStatusAC } = appSlice.actions
+export const { changeThemeModeAC, setAppStatusAC } = appSlice.actions
 export const appReducer = appSlice.reducer
 export const { selectThemeMode, selectStatus } = appSlice.selectors
 
