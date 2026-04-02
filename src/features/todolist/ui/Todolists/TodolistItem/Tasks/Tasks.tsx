@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { fetchTasksTC, selectTasks } from "@/features/todolist/model/task-slice.ts"
 import { DomainTodolist } from "@/features/todolist/model/todolists-slice.ts"
 import { useEffect } from "react"
-import { TaskStatus } from "@/features/todolist/api/tasksApi.types.ts"
+import { TaskStatus } from "@/common/enum"
 
 type Props = {
   todolist: DomainTodolist
@@ -36,7 +36,7 @@ export const Tasks = ({ todolist }: Props) => {
       ) : (
         <List>
           {filteredTasks?.map((task) => (
-            <TaskItem key={task.id} task={task} todolistId={id} />
+            <TaskItem key={task.id} task={task} todolist={todolist} />
           ))}
         </List>
       )}

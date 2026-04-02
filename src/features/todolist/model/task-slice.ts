@@ -4,6 +4,9 @@ import { tasksApi } from "@/features/todolist/api/tasksApi.ts"
 import { DomainTask, UpdateTaskModel } from "@/features/todolist/api/tasksApi.types.ts"
 import { setAppStatusAC } from "@/app/app-slice.ts"
 import { RootState } from "@/app/store.ts"
+import { ResultCode } from "@/common/enum"
+import { handleServerError } from "@/common/utils/handleServerError.ts"
+import { handleAppError } from "@/common/utils/handleAppError.ts"
 
 export type TasksState = Record<string, DomainTask[]>
 
@@ -45,18 +48,22 @@ export const tasksSlice = createAppSlice({
       async (args: { todolistId: string; title: string }, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
-          const res = await tasksApi.createTasks(args)
-          dispatch(setAppStatusAC({ status: "success" }))
-          return res.data.data.item
+          const res = await tasksApi.createTask(args)
+          if (res.data.resultCode === ResultCode.Success) {
+            dispatch(setAppStatusAC({ status: "success" }))
+            return { task: res.data.data.item }
+          } else {
+            handleAppError(res.data, dispatch)
+            return rejectWithValue(null)
+          }
         } catch (error) {
-          dispatch(setAppStatusAC({ status: "failed" }))
+          handleServerError(error, dispatch)
           return rejectWithValue(null)
         }
       },
       {
         fulfilled: (state, action) => {
-          const newTask = action.payload
-          state[action.payload.todoListId].unshift(newTask)
+          state[action.payload.task.todoListId].unshift(action.payload.task)
         },
       },
     ),
