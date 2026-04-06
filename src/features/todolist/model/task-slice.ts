@@ -1,7 +1,7 @@
 import { createTodolistTC, deleteTodolistTC } from "./todolists-slice.ts"
 import { createAppSlice } from "@/common/utils"
 import { tasksApi } from "@/features/todolist/api/tasksApi.ts"
-import { DomainTask, UpdateTaskModel } from "@/features/todolist/api/tasksApi.types.ts"
+import { DomainTask, domainTaskSchema, UpdateTaskModel } from "@/features/todolist/api/tasksApi.types.ts"
 import { setAppStatusAC } from "@/app/app-slice.ts"
 import { RootState } from "@/app/store.ts"
 import { ResultCode } from "@/common/enum"
@@ -31,10 +31,11 @@ export const tasksSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
           const res = await tasksApi.getTasks(todolistId)
+          domainTaskSchema.array().parse(res.data.items)
           dispatch(setAppStatusAC({ status: "success" }))
           return { todolistId, tasks: res.data.items }
         } catch (error) {
-          dispatch(setAppStatusAC({ status: "failed" }))
+          handleServerError(error, dispatch)
           return rejectWithValue(null)
         }
       },
@@ -75,7 +76,7 @@ export const tasksSlice = createAppSlice({
           dispatch(setAppStatusAC({ status: "success" }))
           return args
         } catch (error) {
-          dispatch(setAppStatusAC({ status: "failed" }))
+          handleServerError(error, dispatch)
           return rejectWithValue(null)
         }
       },
@@ -120,7 +121,7 @@ export const tasksSlice = createAppSlice({
           dispatch(setAppStatusAC({ status: "success" }))
           return { task: res.data.data.item }
         } catch (error) {
-          dispatch(setAppStatusAC({ status: "failed" }))
+          handleServerError(error, dispatch)
           return rejectWithValue(null)
         }
       },
