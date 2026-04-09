@@ -1,5 +1,5 @@
-import { BaseResponse } from "@/common/types"
-import { Todolist } from "@/features/todolist/api/todolistsApi.types.ts"
+import { DefaultResponse } from "@/common/types"
+import { CreateTodolistResponse } from "@/features/todolist/api/todolistsApi.types.ts"
 import { instance } from "@/common/instance"
 
 export const todolistsApi = {
@@ -8,14 +8,14 @@ export const todolistsApi = {
   },
 
   createTodolist(title: string) {
-    return instance.post<BaseResponse<{ item: Todolist }>>("/todo-lists", { title })
+    return instance.post<CreateTodolistResponse>("/todo-lists", { title })
   },
 
   deleteTodolist(id: string) {
-    return instance.delete<BaseResponse>(`/todo-lists/${id}`)
+    return instance.delete<DefaultResponse>(`/todo-lists/${id}`)
   },
 
   changeTodolistTitle({ id, title }: { id: string; title: string }) {
-    return instance.put<BaseResponse>(`/todo-lists/${id}`, { title })
+    return instance.put<DefaultResponse>(`/todo-lists/${id}`, { title })
   },
 }

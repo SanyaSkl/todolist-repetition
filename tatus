@@ -1,0 +1,15 @@
+[33m05d2648[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m 16.1 - homework: added button-link on page 'pageNotFound', refactor controller 'TextField', validation at response todolist,
+[33m6b46d7e[m 16 - react router, react hook form, zod
+[33m1eab877[m 15 - Disables elements 'todolist', displaying errors, error handling, generics
+[33m076d725[m 14.2 - completed homework: refactoring thunk for todolists, added loaders for everyone thunk creators, refactoring tests
+[33m9db55da[m 14 - create async thunk, thunk fetch tasks, loader
+[33me411f40[m 13 - rewriting the code 'slice' and 'thunk'
+[33m373b869[m 12 - added prettier, Env variable, CRUD tasks, Enums
+[33md2c1db4[m 11 - refactoring code, REST API, CRUD - operations, Generics, instance and todolisApi
+[33m1968995[m 10 - code decomposition 3
+[33md6f4b0a[m 10.1 - code decomposition 2
+[33m6b8e414[m 10 - code decomposition
+[33m1df522d[m 09.3 - baseUrl
+[33m84f8be8[m 9.2 - Theme change has been moved to Redux and a separate "Theme" component has been created
+[33m4e5e0d7[m 09.1 - Hook typing, selector functions added, reducer refactoring
+[33md3c1b2e[m 09 - added Redux Toolkit, provider, useSelector, store
