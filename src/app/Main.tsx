@@ -3,7 +3,10 @@ import { CreateItemForm } from "@/common/Components/CreateItemForm/CreateItemFor
 import Container from "@mui/material/Container"
 import { createTodolistTC } from "@/features/todolist/model/todolists-slice.ts"
 import { Todolists } from "@/features/todolist/ui/Todolists/Todolists.tsx"
-import { useAppDispatch } from "@/common/hooks"
+import { useAppDispatch, useAppSelector } from "@/common/hooks"
+import { Navigate } from "react-router"
+import { Path } from "@/common/routing"
+import { selectIsLoggedIn } from "@/features/auth/authSlice.ts"
 
 export const Main = () => {
   const dispatch = useAppDispatch()
@@ -11,6 +14,10 @@ export const Main = () => {
   const createTodolist = (title: string) => {
     dispatch(createTodolistTC(title))
   }
+
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
+
+  if (!isLoggedIn) return <Navigate to={Path.Login} />
 
   return (
     <Container maxWidth={"lg"}>

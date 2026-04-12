@@ -10,16 +10,22 @@ import { containerSx } from "@/common/Styles"
 import { getTheme } from "@/common/theme"
 import { changeThemeModeAC, selectStatus, selectThemeMode } from "@/app/app-slice.ts"
 import { LinearProgress } from "@mui/material"
+import { logoutTC, selectIsLoggedIn } from "@/features/auth/authSlice.ts"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
   const status = useAppSelector(selectStatus)
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
   const dispatch = useAppDispatch()
   const theme = getTheme(themeMode)
 
   const changeMode = () => {
     dispatch(changeThemeModeAC({ themeMode: themeMode === "light" ? "dark" : "light" }))
+  }
+
+  const logoutHandler = () => {
+    dispatch(logoutTC())
   }
 
   return (
@@ -31,8 +37,7 @@ export const Header = () => {
               <MenuIcon />
             </IconButton>
             <div>
-              <NavButton>Sign in</NavButton>
-              <NavButton>Sign up</NavButton>
+              {isLoggedIn && <NavButton onClick={logoutHandler}>Logout</NavButton>}
               <NavButton background={theme.palette.primary.dark}>Faq</NavButton>
               <Switch color="default" onChange={changeMode} checked={themeMode === "dark"} />
             </div>
