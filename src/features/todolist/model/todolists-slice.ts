@@ -1,5 +1,5 @@
 import { createTodolistResponseSchema, Todolist, todolistSchema } from "@/features/todolist/api/todolistsApi.types.ts"
-import { todolistsApi } from "@/features/todolist/api/todolistsApi.ts"
+import { _todolistsApi } from "@/features/todolist/api/todolistsApi.ts"
 import { createAppSlice } from "@/common/utils"
 import { setAppStatusAC } from "@/app/app-slice.ts"
 import { RequestStatus } from "@/common/types"
@@ -26,7 +26,7 @@ export const todolistsSlice = createAppSlice({
       async (_, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
-          const res = await todolistsApi.getTodolists()
+          const res = await _todolistsApi.getTodolists()
           todolistSchema.array().parse(res.data)
           dispatch(setAppStatusAC({ status: "success" }))
           return { todolists: res.data }
@@ -48,7 +48,7 @@ export const todolistsSlice = createAppSlice({
       async (title: string, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
-          const res = await todolistsApi.createTodolist(title)
+          const res = await _todolistsApi.createTodolist(title)
           createTodolistResponseSchema.parse(res.data)
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: "success" }))
@@ -74,7 +74,7 @@ export const todolistsSlice = createAppSlice({
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
           dispatch(changeTodolistEntityStatusAC({ id, entityStatus: "loading" }))
-          const res = await todolistsApi.deleteTodolist(id)
+          const res = await _todolistsApi.deleteTodolist(id)
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: "success" }))
             return { id }
@@ -101,7 +101,7 @@ export const todolistsSlice = createAppSlice({
       async (arg: { id: string; title: string }, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
-          await todolistsApi.changeTodolistTitle(arg)
+          await _todolistsApi.changeTodolistTitle(arg)
           dispatch(setAppStatusAC({ status: "success" }))
           return arg
         } catch (error) {

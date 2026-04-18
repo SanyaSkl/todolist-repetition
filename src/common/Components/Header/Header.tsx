@@ -8,15 +8,18 @@ import Container from "@mui/material/Container"
 import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { containerSx } from "@/common/Styles"
 import { getTheme } from "@/common/theme"
-import { changeThemeModeAC, selectStatus, selectThemeMode } from "@/app/app-slice.ts"
+import { changeThemeModeAC, selectIsLoggedIn, selectStatus, selectThemeMode, setIsLoggedIn } from "@/app/app-slice.ts"
 import { LinearProgress } from "@mui/material"
-import { logoutTC, selectIsLoggedIn } from "@/features/auth/authSlice.ts"
+import { useLogoutMutation } from "@/features/auth/api/authApi.ts"
+import { ResultCode } from "@/common/enum"
+import { AUTH_TOKEN } from "@/common/constants"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
   const status = useAppSelector(selectStatus)
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
+  const [logoutMutation] = useLogoutMutation()
   const dispatch = useAppDispatch()
   const theme = getTheme(themeMode)
 
@@ -25,7 +28,14 @@ export const Header = () => {
   }
 
   const logoutHandler = () => {
-    dispatch(logoutTC())
+    logoutMutation()
+      .unwrap()
+      .then((data) => {
+        if (data.resultCode === ResultCode.Success) {
+          localStorage.removeItem(AUTH_TOKEN)
+          dispatch(setIsLoggedIn({ isLoggedIn: false }))
+        }
+      })
   }
 
   return (

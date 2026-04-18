@@ -1,10 +1,8 @@
 import { List } from "@mui/material"
 import { TaskItem } from "@/features/todolist/ui/Todolists/TodolistItem/Tasks/TaskItem/TaskItem.tsx"
-import { useAppDispatch, useAppSelector } from "@/common/hooks"
-import { fetchTasksTC, selectTasks } from "@/features/todolist/model/task-slice.ts"
 import { DomainTodolist } from "@/features/todolist/model/todolists-slice.ts"
-import { useEffect } from "react"
 import { TaskStatus } from "@/common/enum"
+import { useGetTasksQuery } from "@/features/todolist/api/tasksApi.ts"
 
 type Props = {
   todolist: DomainTodolist
@@ -13,20 +11,21 @@ type Props = {
 export const Tasks = ({ todolist }: Props) => {
   const { id, filter } = todolist
 
-  const tasks = useAppSelector(selectTasks)
-  const dispatch = useAppDispatch()
+  const { data } = useGetTasksQuery(id)
 
-  useEffect(() => {
-    dispatch(fetchTasksTC(id))
-  }, [])
+  // const tasks = useAppSelector(selectTasks)
+  // const dispatch = useAppDispatch()
+  //
+  // useEffect(() => {
+  //   dispatch(fetchTasksTC(id))
+  // }, [])
 
-  const todolistTasks = tasks[id]
-  let filteredTasks = todolistTasks
+  let filteredTasks = data?.items
   if (filter === "active") {
-    filteredTasks = todolistTasks.filter((task) => task.status === TaskStatus.New)
+    filteredTasks = filteredTasks?.filter((task) => task.status === TaskStatus.New)
   }
   if (filter === "completed") {
-    filteredTasks = todolistTasks.filter((task) => task.status === TaskStatus.Completed)
+    filteredTasks = filteredTasks?.filter((task) => task.status === TaskStatus.Completed)
   }
 
   return (

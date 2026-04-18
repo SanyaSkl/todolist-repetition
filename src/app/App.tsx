@@ -4,24 +4,35 @@ import CssBaseline from "@mui/material/CssBaseline"
 import { Header } from "@/common/Components/Header/Header.tsx"
 import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { getTheme } from "@/common/theme"
-import { selectThemeMode } from "@/app/app-slice.ts"
 import { ErrorSnackbar } from "@/common/Components"
 import { Routing } from "@/common/routing/Route.tsx"
 import { useEffect, useState } from "react"
-import { meTC } from "@/features/auth/authSlice.ts"
+import { useMeQuery } from "@/features/auth/api/authApi.ts"
+import { ResultCode } from "@/common/enum"
+import { selectThemeMode, setIsLoggedIn } from "@/app/app-slice.ts"
 
 export const App = () => {
   const [init, setInit] = useState(false)
 
   const themeMode = useAppSelector(selectThemeMode)
-  const theme = getTheme(themeMode)
   const dispatch = useAppDispatch()
 
+  const theme = getTheme(themeMode)
+
+  const { data, isLoading } = useMeQuery()
+  // useEffect(() => {
+  //   dispatch(meTC()).finally(() => {
+  //     setInit(true)
+  //   })
+  // }, [])
+
   useEffect(() => {
-    dispatch(meTC()).finally(() => {
-      setInit(true)
-    })
-  }, [])
+    if (isLoading) return
+    if (data?.resultCode === ResultCode.Success) {
+      dispatch(setIsLoggedIn({ isLoggedIn: true }))
+    }
+    setInit(true)
+  }, [isLoading])
 
   if (!init) {
     return (

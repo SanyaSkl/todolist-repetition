@@ -1,4 +1,4 @@
-import { selectThemeMode } from "@/app/app-slice"
+import { selectThemeMode, setIsLoggedIn } from "@/app/app-slice"
 import { useAppDispatch, useAppSelector } from "@/common/hooks"
 import { getTheme } from "@/common/theme"
 import Button from "@mui/material/Button"
@@ -13,21 +13,17 @@ import { Controller, useForm } from "react-hook-form"
 import styles from "./Login.module.css"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { LoginInputs, loginSchema } from "@/features/auth/lib/schemas"
-import { loginTC } from "@/features/auth/authSlice.ts"
+import { useLoginMutation } from "@/features/auth/api/authApi.ts"
+import { ResultCode } from "@/common/enum"
+import { AUTH_TOKEN } from "@/common/constants"
 
 export const Login = () => {
   const themeMode = useAppSelector(selectThemeMode)
-  // const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
   const theme = getTheme(themeMode)
   const dispatch = useAppDispatch()
-  // const navigate = useNavigate()
 
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     navigate(Path.Main)
-  //   }
-  // }, [isLoggedIn])
+  const [loginMutation] = useLoginMutation()
 
   const {
     handleSubmit,
@@ -40,16 +36,16 @@ export const Login = () => {
   })
 
   const onSubmit = (data: LoginInputs) => {
-    dispatch(loginTC(data))
+    loginMutation(data)
       .unwrap()
-      .then(() => {
+      .then((data) => {
+        if (data?.resultCode === ResultCode.Success) {
+          localStorage.setItem(AUTH_TOKEN, data.data.token)
+          dispatch(setIsLoggedIn({ isLoggedIn: true }))
+        }
         reset()
       })
   }
-
-  // if (isLoggedIn) {
-  //   return <Navigate to={Path.Main} />
-  // }
 
   return (
     <Grid container justifyContent={"center"}>

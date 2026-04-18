@@ -1,6 +1,6 @@
 import { createTodolistTC, deleteTodolistTC } from "./todolists-slice.ts"
 import { createAppSlice } from "@/common/utils"
-import { tasksApi } from "@/features/todolist/api/tasksApi.ts"
+import { _tasksApi } from "@/features/todolist/api/tasksApi.ts"
 import {
   DomainTask,
   getTasksSchema,
@@ -36,7 +36,7 @@ export const tasksSlice = createAppSlice({
       async (todolistId: string, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
-          const res = await tasksApi.getTasks(todolistId)
+          const res = await _tasksApi.getTasks(todolistId)
           getTasksSchema.parse(res.data)
           dispatch(setAppStatusAC({ status: "success" }))
           return { todolistId, tasks: res.data.items }
@@ -55,7 +55,7 @@ export const tasksSlice = createAppSlice({
       async (args: { todolistId: string; title: string }, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
-          const res = await tasksApi.createTask(args)
+          const res = await _tasksApi.createTask(args)
           taskOperationResponseSchema.parse(res.data)
           if (res.data.resultCode === ResultCode.Success) {
             dispatch(setAppStatusAC({ status: "success" }))
@@ -79,7 +79,7 @@ export const tasksSlice = createAppSlice({
       async (args: { todolistId: string; taskId: string }, { dispatch, rejectWithValue }) => {
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
-          const res = await tasksApi.deleteTask(args)
+          const res = await _tasksApi.deleteTask(args)
           defaultResponseSchema.parse(res.data)
           dispatch(setAppStatusAC({ status: "success" }))
           return args
@@ -125,7 +125,7 @@ export const tasksSlice = createAppSlice({
 
         try {
           dispatch(setAppStatusAC({ status: "loading" }))
-          const res = await tasksApi.updateTask({ todolistId, taskId, model })
+          const res = await _tasksApi.updateTask({ todolistId, taskId, model })
           taskOperationResponseSchema.parse(res.data)
           dispatch(setAppStatusAC({ status: "success" }))
           return { task: res.data.data.item }
