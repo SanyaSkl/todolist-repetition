@@ -3,6 +3,7 @@ import { TaskItem } from "@/features/todolist/ui/Todolists/TodolistItem/Tasks/Ta
 import { DomainTodolist } from "@/features/todolist/model/todolists-slice.ts"
 import { TaskStatus } from "@/common/enum"
 import { useGetTasksQuery } from "@/features/todolist/api/tasksApi.ts"
+import { TasksSkeleton } from "@/features/todolist/ui/Todolists/TodolistItem/Tasks/TasksSkeleton/TasksSkeleton.tsx"
 
 type Props = {
   todolist: DomainTodolist
@@ -11,7 +12,7 @@ type Props = {
 export const Tasks = ({ todolist }: Props) => {
   const { id, filter } = todolist
 
-  const { data } = useGetTasksQuery(id)
+  const { data, isLoading } = useGetTasksQuery(id)
 
   // const tasks = useAppSelector(selectTasks)
   // const dispatch = useAppDispatch()
@@ -26,6 +27,10 @@ export const Tasks = ({ todolist }: Props) => {
   }
   if (filter === "completed") {
     filteredTasks = filteredTasks?.filter((task) => task.status === TaskStatus.Completed)
+  }
+
+  if (isLoading) {
+    return <TasksSkeleton />
   }
 
   return (

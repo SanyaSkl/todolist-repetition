@@ -13,6 +13,7 @@ import { LinearProgress } from "@mui/material"
 import { useLogoutMutation } from "@/features/auth/api/authApi.ts"
 import { ResultCode } from "@/common/enum"
 import { AUTH_TOKEN } from "@/common/constants"
+import { baseApi } from "@/app/baseApi.ts"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -35,6 +36,10 @@ export const Header = () => {
           localStorage.removeItem(AUTH_TOKEN)
           dispatch(setIsLoggedIn({ isLoggedIn: false }))
         }
+      })
+      .then(() => {
+        //dispatch(baseApi.util.resetApiState())
+        dispatch(baseApi.util.invalidateTags(["Todolist", "Task"]))
       })
   }
 

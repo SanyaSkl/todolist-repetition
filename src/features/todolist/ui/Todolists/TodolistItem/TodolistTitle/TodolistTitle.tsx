@@ -3,7 +3,13 @@ import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { DomainTodolist } from "@/features/todolist/model/todolists-slice.ts"
 import styles from "./TodolistTitle.module.css"
-import { useChangeTodolistTitleMutation, useDeleteTodolistMutation } from "@/features/todolist/api/todolistsApi.ts"
+import {
+  todolistsApi,
+  useChangeTodolistTitleMutation,
+  useDeleteTodolistMutation,
+} from "@/features/todolist/api/todolistsApi.ts"
+import { useAppDispatch } from "@/common/hooks"
+import { RequestStatus } from "@/common/types"
 
 type Props = {
   todolist: DomainTodolist
@@ -11,15 +17,33 @@ type Props = {
 
 export const TodolistTitle = ({ todolist }: Props) => {
   const { id, title, entityStatus } = todolist
+  const dispatch = useAppDispatch()
 
   const [deleteTodolistMutation] = useDeleteTodolistMutation()
   const [changeTodolistTitleMutation] = useChangeTodolistTitleMutation()
 
+  const changeTodolistStatus = (entityStatus: RequestStatus) => {
+    dispatch(
+      todolistsApi.util.updateQueryData("getTodolists", undefined, (state) => {
+        const todolist = state.find((todolist) => todolist.id === id)
+        if (todolist) {
+          todolist.entityStatus = entityStatus
+        }
+      }),
+    )
+  }
+
+  const deleteTodolist = () => {
+    changeTodolistStatus("loading")
+    deleteTodolistMutation(id)
+      .unwrap()
+      .catch(() => {
+        changeTodolistStatus("failed")
+      })
+  }
+
   const changeTodolistTitleHandler = (title: string) => {
     changeTodolistTitleMutation({ id, title })
-  }
-  const deleteTodolistHandler = () => {
-    deleteTodolistMutation(id)
   }
 
   return (
@@ -27,7 +51,7 @@ export const TodolistTitle = ({ todolist }: Props) => {
       <h3>
         <EditableSpan value={title} onChange={changeTodolistTitleHandler} />
       </h3>
-      <IconButton onClick={deleteTodolistHandler} disabled={entityStatus === "loading"}>
+      <IconButton onClick={deleteTodolist} disabled={entityStatus === "loading"}>
         <DeleteIcon />
       </IconButton>
     </div>
