@@ -1,6 +1,6 @@
-import { instance } from "@/common/instance"
-import { GetTasksResponse, TaskOperationResponse, UpdateTaskModel } from "./tasksApi.types.ts"
+import { GetTasksResponse, TaskOperationResponse, UpdateTaskModel } from "./tasksApi.types"
 import { DefaultResponse } from "@/common/types"
+import { instance } from "@/common/instance"
 import { baseApi } from "@/app/baseApi.ts"
 
 export const tasksApi = baseApi.injectEndpoints({
@@ -23,7 +23,7 @@ export const tasksApi = baseApi.injectEndpoints({
     }),
     updateTask: build.mutation<TaskOperationResponse, { todolistId: string; taskId: string; model: UpdateTaskModel }>({
       query: ({ todolistId, taskId, model }) => {
-        return { method: "put", url: `/todo-lists/${todolistId}/tasks/${taskId}`, model }
+        return { method: "put", url: `/todo-lists/${todolistId}/tasks/${taskId}`, body: model }
       },
       invalidatesTags: ["Task"],
     }),

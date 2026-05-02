@@ -6,9 +6,9 @@ import { ChangeEvent } from "react"
 import { getListItemSx } from "./TaskItem.styles.ts"
 import { DomainTask } from "@/features/todolist/api/tasksApi.types.ts"
 import { TaskStatus } from "@/common/enum"
-import { DomainTodolist } from "@/features/todolist/model/todolists-slice.ts"
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "@/features/todolist/api/tasksApi.ts"
 import { createTaskModel } from "@/features/todolist/lib/utils"
+import { DomainTodolist } from "@/features/todolist/lib/types"
 
 type Props = {
   task: DomainTask
@@ -46,7 +46,6 @@ export const TaskItem = ({ task, todolist }: Props) => {
       <div>
         <Checkbox checked={isDone} onChange={changeTaskStatus} disabled={disabled} />
         <EditableSpan value={task.title} onChange={changeTaskTitle} disabled={disabled} />
-        <span> - {new Date(task.addedDate).toLocaleDateString()}</span>
       </div>
       <IconButton onClick={deleteTask} disabled={disabled}>
         <DeleteIcon />

@@ -1,7 +1,6 @@
 import { EditableSpan } from "@/common/Components/EditableSpan/EditableSpan.tsx"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
-import { DomainTodolist } from "@/features/todolist/model/todolists-slice.ts"
 import styles from "./TodolistTitle.module.css"
 import {
   todolistsApi,
@@ -10,6 +9,7 @@ import {
 } from "@/features/todolist/api/todolistsApi.ts"
 import { useAppDispatch } from "@/common/hooks"
 import { RequestStatus } from "@/common/types"
+import { DomainTodolist } from "@/features/todolist/lib/types"
 
 type Props = {
   todolist: DomainTodolist
