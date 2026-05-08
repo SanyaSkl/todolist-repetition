@@ -2,12 +2,17 @@ import { GetTasksResponse, TaskOperationResponse, UpdateTaskModel } from "./task
 import { DefaultResponse } from "@/common/types"
 import { instance } from "@/common/instance"
 import { baseApi } from "@/app/baseApi.ts"
+import { PAGE_SIZE } from "@/common/constants"
 
 export const tasksApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getTasks: build.query<GetTasksResponse, string>({
-      query: (todolistId) => `todo-lists/${todolistId}/tasks`,
-      providesTags: (_result, _error, todolistId) => [{ type: "Task", id: todolistId }],
+    getTasks: build.query<GetTasksResponse, { todolistId: string; params: { page: number } }>({
+      // query: (todolistId) => `todo-lists/${todolistId}/tasks`,
+      query: ({ todolistId, params }) => ({
+        url: `todo-lists/${todolistId}/tasks`,
+        params: { ...params, count: PAGE_SIZE },
+      }),
+      providesTags: (_result, _error, { todolistId }) => [{ type: "Task", id: todolistId }],
     }),
     createTask: build.mutation<TaskOperationResponse, { todolistId: string; title: string }>({
       query: ({ todolistId, title }) => {
