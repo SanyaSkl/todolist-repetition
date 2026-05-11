@@ -20,11 +20,6 @@ export const App = () => {
   const theme = getTheme(themeMode)
 
   const { data, isLoading } = useMeQuery()
-  // useEffect(() => {
-  //   dispatch(meTC()).finally(() => {
-  //     setInit(true)
-  //   })
-  // }, [])
 
   useEffect(() => {
     if (isLoading) return

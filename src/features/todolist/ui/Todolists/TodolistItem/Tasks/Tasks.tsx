@@ -4,8 +4,9 @@ import { TaskStatus } from "@/common/enum"
 import { useGetTasksQuery } from "@/features/todolist/api/tasksApi.ts"
 import { TasksSkeleton } from "@/features/todolist/ui/Todolists/TodolistItem/Tasks/TasksSkeleton/TasksSkeleton.tsx"
 import { DomainTodolist } from "@/features/todolist/lib/types"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { TasksPagination } from "@/features/todolist/ui/Todolists/TodolistItem/Tasks/TasksPagination/TasksPagination.tsx"
+import { PAGE_SIZE } from "@/common/constants"
 
 type Props = {
   todolist: DomainTodolist
@@ -17,12 +18,12 @@ export const Tasks = ({ todolist }: Props) => {
 
   const { data, isLoading } = useGetTasksQuery({ todolistId: id, params: { page } })
 
-  // const tasks = useAppSelector(selectTasks)
-  // const dispatch = useAppDispatch()
-  //
-  // useEffect(() => {
-  //   dispatch(fetchTasksTC(id))
-  // }, [])
+  const totalCount = data?.totalCount ?? 0
+  useEffect(() => {
+    if (totalCount <= PAGE_SIZE) {
+      setPage(1)
+    }
+  }, [totalCount])
 
   let filteredTasks = data?.items
   if (filter === "active") {
@@ -36,6 +37,8 @@ export const Tasks = ({ todolist }: Props) => {
     return <TasksSkeleton />
   }
 
+  const showPagination = totalCount > PAGE_SIZE
+
   return (
     <>
       {filteredTasks?.length === 0 ? (
@@ -47,7 +50,7 @@ export const Tasks = ({ todolist }: Props) => {
               <TaskItem key={task.id} task={task} todolist={todolist} />
             ))}
           </List>
-          <TasksPagination totalCount={data?.totalCount || 0} page={page} setPage={setPage} />
+          {showPagination && <TasksPagination totalCount={data?.totalCount || 0} page={page} setPage={setPage} />}
         </>
       )}
     </>

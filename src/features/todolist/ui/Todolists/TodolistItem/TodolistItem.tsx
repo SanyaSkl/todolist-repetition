@@ -10,19 +10,16 @@ type Props = {
 }
 
 export const TodolistItem = ({ todolist }: Props) => {
-  // const dispatch = useAppDispatch()
-
   const [createTaskMutation] = useCreateTaskMutation()
 
   const createTask = (title: string) => {
     createTaskMutation({ todolistId: todolist.id, title })
-    // dispatch(createTaskTC({ todolistId: todolist.id, title }))
   }
 
   return (
     <div>
       <TodolistTitle todolist={todolist} />
-      <CreateItemForm onCreateItem={createTask} entityStatus={todolist.entityStatus} />
+      <CreateItemForm onCreateItem={createTask} />
       <Tasks todolist={todolist} />
       <FilterButtons todolist={todolist} />
     </div>

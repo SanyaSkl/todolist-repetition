@@ -13,7 +13,6 @@ export const Main = () => {
 
   const createTodolist = (title: string) => {
     createTodolistMutation(title)
-    // dispatch(createTodolistTC(title))
   }
 
   const isLoggedIn = useAppSelector(selectIsLoggedIn)

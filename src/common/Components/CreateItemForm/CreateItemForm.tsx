@@ -2,14 +2,12 @@ import AddBoxIcon from "@mui/icons-material/AddBox"
 import { TextField } from "@mui/material"
 import IconButton from "@mui/material/IconButton"
 import { type ChangeEvent, type KeyboardEvent, useState } from "react"
-import { RequestStatus } from "@/common/types"
 
 type Props = {
   onCreateItem: (title: string) => void
-  entityStatus?: RequestStatus
 }
 
-export const CreateItemForm = ({ onCreateItem, entityStatus }: Props) => {
+export const CreateItemForm = ({ onCreateItem }: Props) => {
   const [title, setTitle] = useState("")
   const [error, setError] = useState<string | null>(null)
 
@@ -46,9 +44,8 @@ export const CreateItemForm = ({ onCreateItem, entityStatus }: Props) => {
         value={title}
         onChange={changeItemTitleHandler}
         onKeyDown={createItemOnEnterHandler}
-        disabled={entityStatus === "loading"}
       />
-      <IconButton onClick={createItemHandler} color={"primary"} disabled={entityStatus === "loading"}>
+      <IconButton onClick={createItemHandler} color={"primary"}>
         <AddBoxIcon />
       </IconButton>
     </div>

@@ -21,7 +21,6 @@ export const TaskItem = ({ task, todolist }: Props) => {
 
   const deleteTask = () => {
     deleteTaskMutation({ todolistId: todolist.id, taskId: task.id })
-    // dispatch(deleteTaskTC({ todolistId: todolist.id, taskId: task.id }))
   }
 
   const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,21 +32,19 @@ export const TaskItem = ({ task, todolist }: Props) => {
   const changeTaskTitle = (title: string) => {
     const model = createTaskModel(task, { title })
     updateTaskMutation({ taskId: task.id, todolistId: todolist.id, model })
-    // dispatch(updateTaskTC({ todolistId: todolist.id, taskId: task.id, domainModel: { title } }))
   }
 
   const isTaskCompleted = task.status === TaskStatus.Completed
-  const disabled = todolist.entityStatus === "loading"
 
   const isDone = task.status === TaskStatus.Completed
 
   return (
     <ListItem sx={getListItemSx(isTaskCompleted)}>
       <div>
-        <Checkbox checked={isDone} onChange={changeTaskStatus} disabled={disabled} />
-        <EditableSpan value={task.title} onChange={changeTaskTitle} disabled={disabled} />
+        <Checkbox checked={isDone} onChange={changeTaskStatus} />
+        <EditableSpan value={task.title} onChange={changeTaskTitle} />
       </div>
-      <IconButton onClick={deleteTask} disabled={disabled}>
+      <IconButton onClick={deleteTask}>
         <DeleteIcon />
       </IconButton>
     </ListItem>

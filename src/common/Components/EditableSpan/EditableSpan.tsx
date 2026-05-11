@@ -7,7 +7,7 @@ type Props = {
   disabled?: boolean
 }
 
-export const EditableSpan = ({ value, onChange, disabled }: Props) => {
+export const EditableSpan = ({ value, onChange, disabled = false }: Props) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const [title, setTitle] = useState(value)
 
