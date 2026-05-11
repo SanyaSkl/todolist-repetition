@@ -4,6 +4,18 @@ import { instance } from "@/common/instance"
 import { baseApi } from "@/app/baseApi.ts"
 import { PAGE_SIZE } from "@/common/constants"
 
+type Patch = {
+  op: "replace" | "remove" | "add"
+  path: (string | number)[]
+  value?: any
+}
+
+type PatchCollection = {
+  patches: Patch[]
+  inversePatches: Patch[]
+  undo: () => void
+}
+
 export const tasksApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getTasks: build.query<GetTasksResponse, { todolistId: string; params: { page: number } }>({
@@ -29,6 +41,32 @@ export const tasksApi = baseApi.injectEndpoints({
     updateTask: build.mutation<TaskOperationResponse, { todolistId: string; taskId: string; model: UpdateTaskModel }>({
       query: ({ todolistId, taskId, model }) => {
         return { method: "put", url: `/todo-lists/${todolistId}/tasks/${taskId}`, body: model }
+      },
+      async onQueryStarted({ todolistId, taskId, model }, { dispatch, queryFulfilled, getState }) {
+        const args = tasksApi.util.selectCachedArgsForQuery(getState(), "getTasks")
+
+        const patchResults: PatchCollection[] = []
+
+        args.forEach((arg) => {
+          patchResults.push(
+            dispatch(
+              tasksApi.util.updateQueryData("getTasks", { todolistId, params: { page: arg.params.page } }, (state) => {
+                const index = state.items.findIndex((task) => task.id === taskId)
+                if (index !== -1) {
+                  state.items[index] = { ...state.items[index], ...model }
+                }
+              }),
+            ),
+          )
+        })
+
+        try {
+          await queryFulfilled
+        } catch (e) {
+          patchResults.forEach((patchResult) => {
+            patchResult.undo()
+          })
+        }
       },
       invalidatesTags: (_result, _error, { todolistId }) => [{ type: "Task", id: todolistId }],
     }),
