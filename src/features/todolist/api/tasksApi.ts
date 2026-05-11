@@ -1,6 +1,5 @@
 import { GetTasksResponse, TaskOperationResponse, UpdateTaskModel } from "./tasksApi.types"
 import { DefaultResponse } from "@/common/types"
-import { instance } from "@/common/instance"
 import { baseApi } from "@/app/baseApi.ts"
 import { PAGE_SIZE } from "@/common/constants"
 
@@ -19,7 +18,6 @@ type PatchCollection = {
 export const tasksApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getTasks: build.query<GetTasksResponse, { todolistId: string; params: { page: number } }>({
-      // query: (todolistId) => `todo-lists/${todolistId}/tasks`,
       query: ({ todolistId, params }) => ({
         url: `todo-lists/${todolistId}/tasks`,
         params: { ...params, count: PAGE_SIZE },
@@ -70,22 +68,27 @@ export const tasksApi = baseApi.injectEndpoints({
       },
       invalidatesTags: (_result, _error, { todolistId }) => [{ type: "Task", id: todolistId }],
     }),
+    reorderTask: build.mutation<
+      DefaultResponse,
+      {
+        todolistId: string
+        taskId: string
+        putAfterItemId: string | null
+      }
+    >({
+      query: ({ todolistId, taskId, putAfterItemId }) => ({
+        method: "put",
+        url: `/todo-lists/${todolistId}/tasks/${taskId}/reorder`,
+        body: { putAfterItemId },
+      }),
+    }),
   }),
 })
 
-export const { useGetTasksQuery, useCreateTaskMutation, useDeleteTaskMutation, useUpdateTaskMutation } = tasksApi
-
-export const _tasksApi = {
-  getTasks(todolistId: string) {
-    return instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`)
-  },
-  createTask({ todolistId, title }: { todolistId: string; title: string }) {
-    return instance.post<TaskOperationResponse>(`/todo-lists/${todolistId}/tasks`, { title })
-  },
-  deleteTask({ todolistId, taskId }: { todolistId: string; taskId: string }) {
-    return instance.delete<DefaultResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`)
-  },
-  updateTask({ todolistId, taskId, model }: { todolistId: string; taskId: string; model: UpdateTaskModel }) {
-    return instance.put<TaskOperationResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
-  },
-}
+export const {
+  useGetTasksQuery,
+  useCreateTaskMutation,
+  useDeleteTaskMutation,
+  useUpdateTaskMutation,
+  useReorderTaskMutation,
+} = tasksApi
