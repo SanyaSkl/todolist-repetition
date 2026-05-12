@@ -5,8 +5,9 @@ import { containerSx } from "@/common/Styles"
 import { TodolistSkeleton } from "@/features/todolist/ui/Todolists/TodolistSkeleton/TodolistSkeleton.tsx"
 import { useEffect, useState } from "react"
 import { closestCenter, DndContext, DragEndEvent } from "@dnd-kit/core"
-import { arrayMove, horizontalListSortingStrategy, SortableContext } from "@dnd-kit/sortable"
+import { horizontalListSortingStrategy, SortableContext } from "@dnd-kit/sortable"
 import { SortableTodolist } from "@/features/todolist/ui/Todolists/SortableTodolist/SortableTodolist.tsx"
+import { reorderItems } from "@/common/utils"
 
 export const Todolists = () => {
   const { data: todolists, isLoading } = useGetTodolistsQuery()
@@ -23,21 +24,22 @@ export const Todolists = () => {
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event
 
-    if (!over || active.id === over.id) return
+    if (!over || active.id === over.id) {
+      return
+    }
 
-    const oldIndex = items.findIndex((t) => t.id === active.id)
-    const newIndex = items.findIndex((t) => t.id === over.id)
+    const { reorderedItems, putAfterItemId } = reorderItems(items, active.id as string, over.id as string)
 
-    const newItems = arrayMove(items, oldIndex, newIndex)
+    setItems(reorderedItems)
 
-    setItems(newItems)
-
-    const putAfterItemId = newIndex === 0 ? null : newItems[newIndex - 1].id
-
-    await reorderTodolist({
-      todolistId: active.id as string,
-      putAfterItemId,
-    })
+    try {
+      await reorderTodolist({
+        todolistId: active.id as string,
+        putAfterItemId,
+      }).unwrap()
+    } catch {
+      setItems(items)
+    }
   }
 
   if (isLoading) {
